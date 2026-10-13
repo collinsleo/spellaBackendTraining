@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const auth = require("../middlewares/auth.middleware")
-const {getProfile} = require("../controllers/user.controllers")
+const adminOnly = require("../middlewares/admin.middleware")
+const {getProfile, fetchAllUsers} = require("../controllers/user.controllers")
 
 
-router.get("/profile", auth, getProfile)
+router.get("/profile", auth, adminOnly, getProfile)
+router.get("/all_users", auth, fetchAllUsers)
 
 
 
