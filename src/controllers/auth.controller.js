@@ -43,23 +43,10 @@ const loginUser = async (req,res) =>{
             })
         }
 
-        const user = await User.findOne({email})
-        if(!user){
-            return res.status(401).json({
-                message: "User not found"
-            })
-        }
+        const {token, user} = await authService.loginUser(email, password)
 
-        const passwordMatch = await bcrypt.compare(password, user.password)
-
-        if(!passwordMatch){
-            return res.status(402).json({
-                message: "Invalid password"
-            })
-        }
-
-        const token = jsonWebToken.sign({id:user._id, email:user.email, role:user.role}, process.env.JWT_SECRETE, {expiresIn: "1h"})
-
+        // console.log(login);
+        
         return res.status(200).json({
             message: "Login successful",
             token,
