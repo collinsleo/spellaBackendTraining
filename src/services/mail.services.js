@@ -28,3 +28,29 @@ exports.sendVerificationEmail = async (to, fullName, code) =>{
 
     return transporter.sendMail(mailOptions)
 }
+
+
+exports.sendLoginCodeEmail = async (to, fullName, code) =>{
+    const templatePath = path.join(__dirname, "..", "templates", "login_code.html")
+
+    let html = fs.readFileSync(templatePath, 'utf-8')
+
+    html =  html
+            .replace("{{firstName}}", fullName)
+            .replace("{{code}}", code)
+            .replace("{{year}}", new Date().getFullYear())
+
+            
+
+    const mailOptions = {
+        from: `${APP_NAME} <${GMAIL_USER}>`,
+        to,
+        subject: "Requested Login Code",
+        html
+    }
+
+    console.log(mailOptions);
+
+
+    return transporter.sendMail(mailOptions)
+}
